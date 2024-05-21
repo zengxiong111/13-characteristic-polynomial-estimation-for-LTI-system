@@ -1,4 +1,4 @@
-function [U_single,Y_single,X] = single_trajectory_generation(N,A,B,C,D,sigma_u,sigma_w,sigma_z)
+function [U_single,Y_single,X] = single_trajectory_generation(N,A,B,C,D,sigma_u,sigma_w,sigma_z,X_1)
 
 n = size(A,1);
 p = size(B,2);
@@ -15,7 +15,8 @@ Y_single = zeros(m,N);
 X = zeros(n,N);
 
 %X(1,1:n) = normrnd(zeros(n,1),sigma_x0*eye(n),n,1)';
-X(1,1:n) = zeros(n,1);
+%X(1,1:n) = zeros(n,1);
+X(1,1:n) = X_1;
 
 for i=2:N
     X(:,i) = A * X(:,i-1) + B * U_single(:,i-1) + W(:,i-1);
