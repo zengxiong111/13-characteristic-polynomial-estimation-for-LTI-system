@@ -6,12 +6,14 @@ T=n;
 num_traj = 5000;
 N = num_traj*(n+1);
 
+X_1 = ones(n,1);
+
 [A,B,C,D] = system_generation(r,m,n,p);
 
 % noise level and input
 sigma_u = 1;
-sigma_w = 0.001;
-sigma_z = 0.001;
+sigma_w = 0.000;
+sigma_z = 0.000;
 
 Obs = C;
 for i=1:n-1
@@ -23,14 +25,14 @@ end
 C*A^n*pinv(Obs)
 
 %single trajectory estimation
-[U_single,Y_single,X] = single_trajectory_generation(N,A,B,C,D,sigma_u,sigma_w,sigma_z);
+[U_single,Y_single,X] = single_trajectory_generation(N,A,B,C,D,sigma_u,sigma_w,sigma_z,X_1);
 p_hat_single = characteristic_polynomial_estimation_single(U_single,Y_single,n,num_traj) 
 
 %Multiple trajectories estimation
 Y_m = zeros(p,n+1,N);
 U_m = zeros(m,n+1,N);
 for i =1:N
-    [U_temp,Y_temp,X] = single_trajectory_generation(n+2,A,B,C,D,sigma_u,sigma_w,sigma_z);
+    [U_temp,Y_temp,X] = single_trajectory_generation(n+2,A,B,C,D,sigma_u,sigma_w,sigma_z,X_1);
     Y_m(:,:,i) = Y_temp(:,1:n+1);
     U_m(:,:,i) = U_temp(:,1:n+1) ;
 end
